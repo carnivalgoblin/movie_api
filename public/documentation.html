@@ -19,11 +19,145 @@
 <!-- MAIN -->
 
 <body>
-    <h2>Documentation: Movie API</h2>
-    <p>
-        This API is a web application, which grants ussers acces to information about various movies, directors and
-        actors.
-    </p>
+    <h1>Movie_API</h1>
+    <h4>Objective</h4>
+    <p>To build the server-side component of a “movies” web application. The web
+        application will provide users with access to information about different
+        movies, directors, and genres. Users will be able to sign up, update their
+        personal information, and create a list of their favorite movies.</p>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col">URL</th>
+                <th scope="col">Method</th>
+                <th scope="col">Query Parameters</th>
+                <th scope="col">Request body data format</th>
+                <th scope="col">Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Return a list of ALL movies to the user</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>none</td>
+                <td>none</td>
+                <td>JSON object holding all info about movies</td>
+            </tr>
+            <tr>
+                <td>Return data about a single movie by title to the user</td>
+                <td>/movies/[title]</td>
+                <td>GET</td>
+                <td>:title</td>
+                <td>none</td>
+                <td>A JSON object holding all the data about a single movie.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    title: 'Back to the Future',<br>
+                    director: 'Robert Zemeckis',<br>
+                    genre: 'Sci-Fi'<br>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Return data about a genre by name/title</td>
+                <td>/movies/[genre]</td>
+                <td>GET</td>
+                <td>:genre</td>
+                <td>none</td>
+                <td>A JSON object holding all the data about a single genre.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    genre: 'Sci-Fi',<br>
+                    description: 'Science fiction (or sci-fi) is a film genre that uses speculative, fictional
+                    science-based depictions of phenomena that
+                    are not fully accepted by mainstream science, such as extraterrestrial lifeforms, spacecraft,
+                    robots, cyborgs,
+                    interstellar travel or other technologies.'<br>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Return data about a director by name</td>
+                <td>/directors/[name]</td>
+                <td>GET</td>
+                <td>:name</td>
+                <td>none</td>
+                <td>A JSON object holding all the data about a director.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    name: 'Robert Zemeckis',<br>
+                    birthdate: '22.07.1957',<br>
+                    deathdate: 'n/a'<br>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Allow new users to register</td>
+                <td>/users/register</td>
+                <td>POST</td>
+                <td>none</td>
+                <td>Data of new user for registration.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    name: 'John Doe',<br>
+                    birthdate: '22.07.1997',<br>
+                    favorite_genre: 'Sci-Fi'<br>
+                    }
+                </td>
+                <td>Text response for successful registration including automatically generated UUID. <br>
+                    Write to console info of new user.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    name: 'John Doe',<br>
+                    id: '001',<br>
+                    birthdate: '22.07.1997',<br>
+                    favorite_genre: 'Sci-Fi'<br>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Allow users to update their user info</td>
+                <td>/users/update/[id]</td>
+                <td>PUT</td>
+                <td>:id</td>
+                <td>Data of updated user info.</td>
+                <td>Text response indication that the changes have been successfully deployed.</td>
+            </tr>
+            <tr>
+                <td>Allow users to add a movie to their list of favorites</td>
+                <td>/users/favourites/add/[id]/[title]</td>
+                <td>POST</td>
+                <td>:id, :title</td>
+                <td>none</td>
+                <td>Text response confirming addition to favourite list.</td>
+            </tr>
+            <tr>
+                <td>Allow users to remove a movie from their list of favorites</td>
+                <td>/users/favourites/remove/[id]/[title]</td>
+                <td>DELETE</td>
+                <td>:id, :title</td>
+                <td>none</td>
+                <td>Text response confirming removal to favourite list.</td>
+            </tr>
+            <tr>
+                <td>Allow existing users to deregister (showing only a text that a user email has been removed—more on
+                    this later)</td>
+                <td>/users/deregister/[id]</td>
+                <td>DELETE</td>
+                <td>:id</td>
+                <td>none</td>
+                <td>Text response confirming deregistration of user.</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 <!-- FOOTER -->
