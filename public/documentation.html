@@ -63,7 +63,7 @@
             </tr>
             <tr>
                 <td>Return data about a genre by name/title</td>
-                <td>/movies/genre/[genre]</td>
+                <td>/genres/[genre]</td>
                 <td>GET</td>
                 <td>:genre</td>
                 <td>none</td>
@@ -110,8 +110,7 @@
                     favorite_genre: 'Sci-Fi'<br>
                     }
                 </td>
-                <td>Text response for successful registration including automatically generated UUID. <br>
-                    Write to console info of new user.
+                <td>JSON response for successful registration including automatically generated UUID.
                     <br><br>
                     Example:<br>
                     {<br>
@@ -124,36 +123,66 @@
             </tr>
             <tr>
                 <td>Allow users to update their user info</td>
-                <td>/users/update/[id]</td>
+                <td>/users/[userID]</td>
                 <td>PUT</td>
-                <td>:id</td>
+                <td>:userID</td>
                 <td>Data of updated user info.</td>
-                <td>Text response indication that the changes have been successfully deployed.</td>
+                <td>JSON response of new user with updated data.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    name: 'John Doe',<br>
+                    id: '001',<br>
+                    birthdate: '22.07.1997',<br>
+                    favorite_genre: 'Thriller'<br>
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Allow users to add a movie to their list of favorites</td>
-                <td>/users/favourites/add/[id]/[title]</td>
-                <td>POST</td>
-                <td>:id, :title</td>
+                <td>/users/[userID]/favorites/[movieID]</td>
+                <td>PATCH</td>
+                <td>:userID, :movieID</td>
                 <td>none</td>
-                <td>Text response confirming addition to favourite list.</td>
+                <td>JSON response confirming addition to favorite list by responding with data of added movie.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    title: 'Back to the Future',<br>
+                    id: 0234
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Allow users to remove a movie from their list of favorites</td>
-                <td>/users/favourites/remove/[id]/[title]</td>
+                <td>/users/[userID]/favorites/[movieID]</td>
                 <td>DELETE</td>
-                <td>:id, :title</td>
+                <td>:userID, :movieID</td>
                 <td>none</td>
-                <td>Text response confirming removal to favourite list.</td>
+                <td>JSON response confirming removal to favorite list by respnding with data of removed movie.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    title: 'Back to the Future',<br>
+                    id: 0234
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Allow existing users to deregister (showing only a text that a user email has been removed—more on
                     this later)</td>
-                <td>/users/deregister/[id]</td>
+                <td>/users/[userID]</td>
                 <td>DELETE</td>
-                <td>:id</td>
+                <td>:userID</td>
                 <td>none</td>
-                <td>Text response confirming deregistration of user.</td>
+                <td>JSON response containing data of deregistrated user.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    name: 'John Doe',<br>
+                    id: '001'<br>
+                    }
+                </td>
             </tr>
         </tbody>
     </table>

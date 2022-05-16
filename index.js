@@ -70,7 +70,7 @@ app.get('/movies/:title', (req, res) => {
     res.send('Successful GET request returning data on a single movie.');
 });
 
-app.get('/movies/genre/:genre', (req, res) => {
+app.get('/genres/:genre', (req, res) => {
     res.send('Successful GET request returning data on a genre.');
 });
 
@@ -82,19 +82,19 @@ app.post('/users/register', (req, res) => {
     res.send('Successful POST request for adding user.')
 });
 
-app.put('/users/update/:id', (req, res) => {
-    res.send('Successful PUT request for updating user info.')
+app.patch('/users/:userID', (req, res) => {
+    res.send('Successful PATCH request for updating user info.')
 });
 
-app.post('/users/favourites/add/:id/:title', (req, res) => {
+app.post('/users/:userID/favorites/:movieID', (req, res) => {
     res.send('Successful POST request for adding a movie to the favorites list.')
 });
 
-app.delete('/users/favourites/remove/:id/:title', (req, res) => {
+app.delete('/users/:userID/favorites/:movieID', (req, res) => {
     res.send('Successful DELETE request for removing a movie from the favorites list.')
 });
 
-app.delete('/users/deregister/:id', (req, res) => {
+app.delete('/users/:userID', (req, res) => {
     res.send('Successful DELETE request for removing user.')
 });
 
