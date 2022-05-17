@@ -1,7 +1,13 @@
 const express = require('express'),
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    mongoose = require('mongoose'),
+    Models = require('./models.js');
 
 const app = express();
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://localhost:27017/flixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('common'));
 
