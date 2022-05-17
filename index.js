@@ -87,6 +87,7 @@ app.get('/directors/:name', (req, res) => {
     res.send('Successful GET request returning data on a director by name.')
 });
 
+//Register new User
 app.post('/users/register', (req, res) => {
     Users.findOne({ Username: req.body.Username })
         .then((user) => {
@@ -112,12 +113,52 @@ app.post('/users/register', (req, res) => {
         });
 });
 
+//Update user by ID
 app.put('/users/:userID', (req, res) => {
     res.send('Successful PUT request for updating user info.')
 });
 
+//Update user by Name
+app.put('/users/:Username', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $set:
+        {
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+        }
+    },
+        { new: true },
+        (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            } else {
+                res.json(updatedUser);
+            }
+        });
+});
+
+//Add favorite by userID and movieID
 app.patch('/users/:userID/favorites/:movieID', (req, res) => {
     res.send('Successful PATCH request for adding a movie to the favorites list.')
+});
+
+//Add favorite by username and movieID
+app.patch('/users/:Username/favorites/:movieID', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $push: { FavoriteMovies: req.params.MovieID }
+    },
+        { new: true },
+        (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            } else {
+                res.json(updatedUser);
+            }
+        });
 });
 
 app.delete('/users/:userID/favorites/:movieID', (req, res) => {
