@@ -82,12 +82,12 @@ app.post('/users/register', (req, res) => {
     res.send('Successful POST request for adding user.')
 });
 
-app.patch('/users/:userID', (req, res) => {
-    res.send('Successful PATCH request for updating user info.')
+app.put('/users/:userID', (req, res) => {
+    res.send('Successful PUT request for updating user info.')
 });
 
-app.post('/users/:userID/favorites/:movieID', (req, res) => {
-    res.send('Successful POST request for adding a movie to the favorites list.')
+app.patch('/users/:userID/favorites/:movieID', (req, res) => {
+    res.send('Successful PATCH request for adding a movie to the favorites list.')
 });
 
 app.delete('/users/:userID/favorites/:movieID', (req, res) => {
