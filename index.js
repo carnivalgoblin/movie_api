@@ -3,6 +3,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Models = require('./models.js');
+const { isBuffer } = require('lodash');
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,75 +15,40 @@ const Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/flixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-let topMovies = [
-    {
-        title: 'The Great Escape',
-        year: '1963',
-        genre: 'Thriller'
-    },
-    {
-        title: 'The Magnificent Seven',
-        year: '1960',
-        genre: 'Western'
-    },
-    {
-        title: 'Back to the Future',
-        year: '1985',
-        genre: 'Sci-Fi'
-    },
-    {
-        title: 'Back to the Future II',
-        year: '1989',
-        genre: 'Sci-Fi'
-    },
-    {
-        title: 'Back to the Future III',
-        year: '1990',
-        genre: 'Sci-Fi'
-    },
-    {
-        title: 'Indiana Jones: Raiders of the Lost Ark)',
-        year: '1981',
-        genre: 'Thriller'
-    },
-    {
-        title: "Marvel's The Avengers",
-        year: '2012',
-        genre: 'Action'
-    },
-    {
-        title: 'Forrest Gump',
-        year: '1994',
-        genre: 'Drama'
-    },
-    {
-        title: 'Home Alone',
-        year: '1990',
-        genre: 'Family'
-    },
-    {
-        title: 'E.T.',
-        year: '1982',
-        genre: 'Sci-Fi'
-    }
-]
-
 app.get('/', (req, res) => {
     res.send('Welcome to the Movie Club!');
 });
 
+//Get all movies
 app.get('/movies', (req, res) => {
-    res.json(topMovies);
+    Movies.find()
+        .then((movies) => {
+            res.status(200).json(movies);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
+//Find one movie by title
 app.get('/movies/:title', (req, res) => {
-    res.send('Successful GET request returning data on a single movie.');
+    Movies.findOne({ Title: req.params.Title })
+        .then((movie) => {
+            res.json(movie);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
+//Get genre info by name
 app.get('/genres/:genre', (req, res) => {
     res.send('Successful GET request returning data on a genre.');
 });
 
+//Get Director info by name
 app.get('/directors/:name', (req, res) => {
     res.send('Successful GET request returning data on a director by name.')
 });
@@ -165,15 +131,32 @@ app.delete('/users/:userID/favorites/:movieID', (req, res) => {
     res.send('Successful DELETE request for removing a movie from the favorites list.')
 });
 
+//Remove user by ID
 app.delete('/users/:userID', (req, res) => {
     res.send('Successful DELETE request for removing user.')
+});
+
+//Remove user by Username
+app.delete('/users/:Username', (req, res) => {
+    Users.findOneAndRemove({ Username: req.params.Username })
+        .then((user) => {
+            if (!user) {
+                res.status(400).send(rey.params.Username + ' was not found.');
+            } else {
+                res.status(200).send(req.params.Username + ' was deleted.');
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //Get all Users
 app.get('/users', (req, res) => {
     Users.find()
         .then((users) => {
-            res.statrus(201).json(users);
+            res.status(201).json(users);
         })
         .catch((err) => {
             console.error(err);
