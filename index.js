@@ -53,6 +53,28 @@ app.get('/directors/:name', (req, res) => {
     res.send('Successful GET request returning data on a director by name.')
 });
 
+//Add favorite by username and movieID
+app.patch('/users/:Username/favorites/:movieID', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $push: { FavoriteMovies: req.params.MovieID }
+    },
+        { new: true },
+        (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            } else {
+                res.json(updatedUser);
+            }
+        });
+});
+
+app.delete('/users/:Username/favorites/:movieID', (req, res) => {
+    res.send('Successful DELETE request for removing a movie from the favorites list.')
+});
+
+//USERS Specific -start-
+
 //Register new User
 app.post('/users/register', (req, res) => {
     Users.findOne({ Username: req.body.Username })
@@ -79,11 +101,6 @@ app.post('/users/register', (req, res) => {
         });
 });
 
-//Update user by ID
-app.put('/users/:userID', (req, res) => {
-    res.send('Successful PUT request for updating user info.')
-});
-
 //Update user by Name
 app.put('/users/:Username', (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -104,36 +121,6 @@ app.put('/users/:Username', (req, res) => {
                 res.json(updatedUser);
             }
         });
-});
-
-//Add favorite by userID and movieID
-app.patch('/users/:userID/favorites/:movieID', (req, res) => {
-    res.send('Successful PATCH request for adding a movie to the favorites list.')
-});
-
-//Add favorite by username and movieID
-app.patch('/users/:Username/favorites/:movieID', (req, res) => {
-    Users.findOneAndUpdate({ Username: req.params.Username }, {
-        $push: { FavoriteMovies: req.params.MovieID }
-    },
-        { new: true },
-        (err, updatedUser) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error: ' + err);
-            } else {
-                res.json(updatedUser);
-            }
-        });
-});
-
-app.delete('/users/:userID/favorites/:movieID', (req, res) => {
-    res.send('Successful DELETE request for removing a movie from the favorites list.')
-});
-
-//Remove user by ID
-app.delete('/users/:userID', (req, res) => {
-    res.send('Successful DELETE request for removing user.')
 });
 
 //Remove user by Username
@@ -175,6 +162,9 @@ app.get('/users/:Username', (req, res) => {
             res.status(500).send('Error: ' + err);
         });
 });
+
+//USERS Specific -end-
+
 
 app.use(express.static('public'));
 
