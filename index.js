@@ -1,15 +1,18 @@
 const express = require('express'),
     morgan = require('morgan'),
+    bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Models = require('./models.js');
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('common'));
+
 const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/flixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
-app.use(morgan('common'));
 
 let topMovies = [
     {
@@ -85,7 +88,28 @@ app.get('/directors/:name', (req, res) => {
 });
 
 app.post('/users/register', (req, res) => {
-    res.send('Successful POST request for adding user.')
+    Users.findOne({ Username: req.body.Username })
+        .then((user) => {
+            if (user) {
+                return res.status(400).send(req.body.Username + ' already exists.');
+            } else {
+                Users.create({
+                    Username: req.body.Username,
+                    Password: req.body.Password,
+                    Email: req.body.Email,
+                    Birthday: req.body.Birthday
+                })
+                    .then((user) => { res.status(201).json(user) })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send('Error: ' + error);
+                    })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
 app.put('/users/:userID', (req, res) => {
