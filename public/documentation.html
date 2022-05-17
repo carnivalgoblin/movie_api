@@ -43,56 +43,98 @@
                 <td>GET</td>
                 <td>none</td>
                 <td>none</td>
-                <td>JSON object holding all info about movies</td>
+                <td>JSON object holding all info about movies
+                    <br><br>
+                    Schema: <br>
+                    Title: { type: String, required: true },<br>
+                    Description: { type: String, required: true },<br>
+                    Genre: {<br>
+                    Name: String,<br>
+                    Description: String<br>
+                    },<br>
+                    Director: {<br>
+                    Name: String,<br>
+                    Bio: String<br>
+                    },<br>
+                    Actors: [String],<br>
+                    ImagePath: String,<br>
+                    Featured: Boolean
+                </td>
             </tr>
             <tr>
                 <td>Return data about a single movie by title to the user</td>
-                <td>/movies/[title]</td>
+                <td>/movies/[Title]</td>
                 <td>GET</td>
-                <td>:title</td>
-                <td>none</td>
+                <td>:Title</td>
+                <td>A JSON object holding the movie title.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    title: 'Back to the Future'<br>
+                    }
+                </td>
                 <td>A JSON object holding all the data about a single movie.
                     <br><br>
                     Example:<br>
                     {<br>
-                    title: 'Back to the Future',<br>
-                    director: 'Robert Zemeckis',<br>
-                    genre: 'Sci-Fi'<br>
+                    "Genre": {<br>
+                    "Name": String,<br>
+                    "Description": String<br>
+                    },<br>
+                    "Director": {<br>
+                    "Name": String,<br>
+                    "Bio": String,<br>
+                    "Birth": String<br>
+                    },<br>
+                    "Actors": [String],<br>
+                    "_id": String,<br>
+                    "Title": String,<br>
+                    "Description": String,<br>
+                    "ImagePath": String,<br>
+                    "Featured": Boolean<br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Return data about a genre by name/title</td>
-                <td>/genres/[genre]</td>
+                <td>/genres/[Name]</td>
                 <td>GET</td>
-                <td>:genre</td>
-                <td>none</td>
+                <td>:Name</td>
+                <td>JSON object holding Genrename
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    Name: String <br>
+                    }
+                </td>
                 <td>A JSON object holding all the data about a single genre.
                     <br><br>
                     Example:<br>
                     {<br>
-                    genre: 'Sci-Fi',<br>
-                    description: 'Science fiction (or sci-fi) is a film genre that uses speculative, fictional
-                    science-based depictions of phenomena that
-                    are not fully accepted by mainstream science, such as extraterrestrial lifeforms, spacecraft,
-                    robots, cyborgs,
-                    interstellar travel or other technologies.'<br>
+                    genre: 'Science Fiction',<br>
+                    description: 'Description of Sci Fi'<br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Return data about a director by name</td>
-                <td>/directors/[name]</td>
+                <td>/directors/[Name]</td>
                 <td>GET</td>
-                <td>:name</td>
-                <td>none</td>
+                <td>:Name</td>
+                <td>JSON object holding name of director
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    Name: String <br>
+                    }
+                </td>
                 <td>A JSON object holding all the data about a director.
                     <br><br>
                     Example:<br>
                     {<br>
-                    name: 'Robert Zemeckis',<br>
-                    birthdate: '22.07.1957',<br>
-                    deathdate: 'n/a'<br>
+                    "Name": String,<br>
+                    "Bio": String,<br>
+                    "Birth": String<br>
                     }
                 </td>
             </tr>
@@ -103,85 +145,130 @@
                 <td>none</td>
                 <td>Data of new user for registration.
                     <br><br>
-                    Example:<br>
-                    {<br>
-                    name: 'John Doe',<br>
-                    birthdate: '22.07.1997',<br>
-                    favorite_genre: 'Sci-Fi'<br>
-                    }
+                    Schema:<br>
+                    Username: { type: String, required: true },<br>
+                    Password: { type: String, required: true },<br>
+                    Email: { type: String, required: true },<br>
+                    Birthday: Date,<br>
+                    Favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
                 </td>
                 <td>JSON response for successful registration including automatically generated UUID.
                     <br><br>
                     Example:<br>
                     {<br>
-                    name: 'John Doe',<br>
-                    id: '001',<br>
-                    birthdate: '22.07.1997',<br>
-                    favorite_genre: 'Sci-Fi'<br>
+                    Username: 'John Doe',<br>
+                    _id: 'String',<br>
+                    Password: 'String',<br>
+                    Email: 'String',<br>
+                    Birtdate: 'Date',<br>
+                    Favorite: [String] <br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Allow users to update their user info</td>
-                <td>/users/[userID]</td>
+                <td>/users/[Username]</td>
                 <td>PUT</td>
-                <td>:userID</td>
-                <td>Data of updated user info.</td>
+                <td>:Username</td>
+                <td>Data of updated user info.
+                    <br><br>
+                    Schema:<br>
+                    Username: { type: String, required: true },<br>
+                    Password: { type: String, required: true },<br>
+                    Email: { type: String, required: true },<br>
+                    Birthday: Date,<br>
+                    Favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+                </td>
                 <td>JSON response of new user with updated data.
                     <br><br>
                     Example:<br>
                     {<br>
-                    name: 'John Doe',<br>
-                    id: '001',<br>
-                    birthdate: '22.07.1997',<br>
-                    favorite_genre: 'Thriller'<br>
+                    Username: 'John Doe',<br>
+                    _id: 'String',<br>
+                    Password: 'String',<br>
+                    Email: 'String',<br>
+                    Birtdate: 'Date',<br>
+                    Favorite: [String], <br>
+                    __v: 'Integer'<br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Allow users to add a movie to their list of favorites</td>
-                <td>/users/[userID]/favorites/[movieID]</td>
+                <td>/users/[Username]/favorites/[MovieID]</td>
                 <td>PATCH</td>
-                <td>:userID, :movieID</td>
-                <td>none</td>
-                <td>JSON response confirming addition to favorite list by responding with data of added movie.
+                <td>:Username, :MovieID</td>
+                <td>JSON object holding Username and MovieID
                     <br><br>
                     Example:<br>
                     {<br>
-                    title: 'Back to the Future',<br>
-                    id: 0234
+                    Username: String, <br>
+                    MovieID: String <br>
+                    }
+                </td>
+                <td>JSON response confirming addition to favorite list by responding with data of updated user.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    "_id": "628266732187440e5f5c7034",<br>
+                    "Username": "rico",<br>
+                    "Password": "password123",<br>
+                    "Email": "rico@mail.com",<br>
+                    "Birthday": "1987-09-25T00:00:00.000Z",<br>
+                    "Favorites": [<br>
+                    "6282637ddfdb6f95aca4eb8f",<br>
+                    "62826384dfdb6f95aca4eb92",<br>
+                    "62826387dfdb6f95aca4eb94"<br>
+                    ]<br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Allow users to remove a movie from their list of favorites</td>
-                <td>/users/[userID]/favorites/[movieID]</td>
+                <td>/users/[Username]/favorites/[MovieID]</td>
                 <td>DELETE</td>
-                <td>:userID, :movieID</td>
-                <td>none</td>
-                <td>JSON response confirming removal to favorite list by respnding with data of removed movie.
+                <td>:Username, :MovieID</td>
+                <td>JSON object holding Username and MovieID
                     <br><br>
                     Example:<br>
                     {<br>
-                    title: 'Back to the Future',<br>
-                    id: 0234
+                    Username: String, <br>
+                    MovieID: String <br>
+                    }
+                </td>
+                <td>JSON response confirming removal to favorite list by respnding with data of updated user.
+                    <br><br>
+                    Example:<br>
+                    {<br>
+                    "_id": "628266732187440e5f5c7034",<br>
+                    "Username": "rico",<br>
+                    "Password": "password123",<br>
+                    "Email": "rico@mail.com",<br>
+                    "Birthday": "1987-09-25T00:00:00.000Z",<br>
+                    "Favorites": [<br>
+                    "6282637ddfdb6f95aca4eb8f",<br>
+                    "62826384dfdb6f95aca4eb92"<br>
+                    ]<br>
                     }
                 </td>
             </tr>
             <tr>
                 <td>Allow existing users to deregister (showing only a text that a user email has been removed—more on
                     this later)</td>
-                <td>/users/[userID]</td>
+                <td>/users/[Username]</td>
                 <td>DELETE</td>
-                <td>:userID</td>
-                <td>none</td>
-                <td>JSON response containing data of deregistrated user.
+                <td>:Username</td>
+                <td>JSON object holding Username
                     <br><br>
                     Example:<br>
                     {<br>
-                    name: 'John Doe',<br>
-                    id: '001'<br>
+                    Username: String <br>
                     }
+                </td>
+                <td>Test response confirming deleted user.
+                    <br><br>
+                    Example:<br>
+                    testuser1 was deleted.
                 </td>
             </tr>
         </tbody>
