@@ -167,11 +167,12 @@ app.put('/users/:Username',
         check('Email', 'Email does not appear ro be valid.').isEmail()
     ],
     passport.authenticate('jwt', { session: false }), (req, res) => {
+        let hashedPassword = Users.hashPassword(req.body.Password);
         Users.findOneAndUpdate({ Username: req.params.Username }, {
             $set:
             {
                 Username: req.body.Username,
-                Password: req.body.Password,
+                Password: hashedPassword,
                 Email: req.body.Email,
                 Birthday: req.body.Birthday
             }
