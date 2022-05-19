@@ -12,17 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-            return callback(new Error(message), false);
-        }
-        return callback(null, true);
-    }
-}));
+app.use(cors());
 
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -169,26 +159,33 @@ app.post('/users/register',
     });
 
 //Update user by Name
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ Username: req.params.Username }, {
-        $set:
-        {
-            Username: req.body.Username,
-            Password: req.body.Password,
-            Email: req.body.Email,
-            Birthday: req.body.Birthday
-        }
-    },
-        { new: true },
-        (err, updatedUser) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error: ' + err);
-            } else {
-                res.json(updatedUser);
+app.put('/users/:Username',
+    [
+        check('Username', 'Username is required.').isLength({ min: 5 }),
+        check('Username', 'Username contains non alphanumeric charachters - not allowed.').isAlphanumeric(),
+        check('Password', 'Pasword is required.').not().isEmpty(),
+        check('Email', 'Email does not appear ro be valid.').isEmail()
+    ],
+    passport.authenticate('jwt', { session: false }), (req, res) => {
+        Users.findOneAndUpdate({ Username: req.params.Username }, {
+            $set:
+            {
+                Username: req.body.Username,
+                Password: req.body.Password,
+                Email: req.body.Email,
+                Birthday: req.body.Birthday
             }
-        });
-});
+        },
+            { new: true },
+            (err, updatedUser) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Error: ' + err);
+                } else {
+                    res.json(updatedUser);
+                }
+            });
+    });
 
 //Remove user by Username
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
