@@ -2,7 +2,7 @@
   "name": "movie_api",
   "version": "1.0.0",
   "description": "API to access movie information.",
-  "main": "index.js",
+  "default": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
@@ -34,5 +34,8 @@
   },
   "devDependencies": {
     "eslint": "^8.15.0"
-  }
+  },
+  "alias": {
+    "process": false
+ }
 }
