@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://rpmyflix.netlify.app/'];
+let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://rpmyflix.netlify.app/', 'https://dev-exc-7--rpmyflix.netlify.app/'];
 
 const cors = require('cors');
 app.use(cors({
