@@ -35,11 +35,21 @@ const Users = Models.User;
 /* mongoose.connect('mongodb://localhost:27017/flixDB', { useNewUrlParser: true, useUnifiedTopology: true }); */
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+
+/**
+ * GET: Returns welcome message from '/' request URL
+ * @returns Welcome message
+ */
 app.get('/', (req, res) => {
     res.send('Welcome to the Movie Club!');
 });
 
-//Get all movies
+/**
+ * GET: returns a list of ALL movies to the user
+ * Request body: Bearer Token
+ * @returns array of movie objects
+ * @requires passport
+ */
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     /* app.get("/movies", function (req, res) { */
     Movies.find()
@@ -52,7 +62,13 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
         });
 });
 
-//Find one movie by title
+/**
+ * GET: Returns data (description, genre, director, image URL, whether it's featured or not) about a single movie by title to the user
+ * Request body: Bearer token
+ * @param Title (of movie)
+ * @returns movie object
+ * @requires passport
+ */
 app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
@@ -64,7 +80,13 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
         });
 });
 
-//Get genre info by name
+/**
+ * GET: Returns description about a genre by name to the user
+ * REquest body: Bearer token
+ * @param Name (of genre)
+ * @returns genre object
+ * @requires passport
+ */
 app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.Name })
         .then((movie) => {
@@ -80,7 +102,13 @@ app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req,
         });
 });
 
-//Get Director info by name
+/**
+ * GET: Returns data (Name, Bio, Birthday) about a director by name to the user
+ * REquest body: Bearer token
+ * @param Name (of genre)
+ * @returns director object
+ * @requires passport
+ */
 app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.Name })
         .then((movie) => {
@@ -96,7 +124,14 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
         });
 });
 
-//Add favorite by username and movieID
+/**
+ * PATCH: Allows users to add a movie to their list of favorites
+ * Request body: Bearer token
+ * @param username
+ * @param movieId
+ * @returns user object
+ * @requires passport
+ */
 app.patch('/users/:Username/favorites/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
         $push: { Favorites: req.params.MovieID }
@@ -112,6 +147,14 @@ app.patch('/users/:Username/favorites/:MovieID', passport.authenticate('jwt', { 
         });
 });
 
+/**
+ * DELETE: Allows users to delete a movie from their list of favorites
+ * Request body: Bearer token
+ * @param username
+ * @param movieId
+ * @returns user object
+ * @requires passport
+ */
 app.delete('/users/:Username/favorites/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
         $pull: { Favorites: req.params.MovieID }
@@ -127,7 +170,13 @@ app.delete('/users/:Username/favorites/:MovieID', passport.authenticate('jwt', {
         });
 });
 
-// get list of favorites
+/**
+ * GET: Returns a list of favorite movies from the user
+ * Request body: Bearer token
+ * @param Username
+ * @returns array of favorite movies
+ * @requires passport
+ */
 app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ Username: req.params.Username })
         .then((user) => {
@@ -145,7 +194,11 @@ app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false
 
 //USERS Specific -start-
 
-//Register new User
+/**
+ * POST: Allow new users to register, Username password & Email are required fields!
+ * Request body: Bearer token, JSON with user information
+ * @returns user object
+ */
 app.post('/users/register',
     [
         check('Username', 'Username is required.').isLength({ min: 5 }),
@@ -186,7 +239,13 @@ app.post('/users/register',
             });
     });
 
-//Update user by Name
+/**
+ * PUT: Allow users to update their user info (find by username)
+ * Request body: Bearer token, updated user info
+ * @param Username
+ * @returns user object with updates
+ * @requires passport
+ */
 app.put('/users/:Username',
     [
         check('Username', 'Username is required.').isLength({ min: 5 }),
@@ -216,7 +275,13 @@ app.put('/users/:Username',
             });
     });
 
-//Remove user by Username
+/**
+ * DELETE: Allows existing users to deregister
+ * Request body: Bearer token
+ * @param Username
+ * @returns success message
+ * @requires passport
+ */
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
         .then((user) => {
@@ -232,7 +297,13 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
         });
 });
 
-//Get all Users
+/**
+ * GET: Returns data on all users (user object) by username
+ * Request body: Bearer token
+ * @param none
+ * @returns user array
+ * @requires passport
+ */
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then((users) => {
@@ -244,7 +315,13 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
         });
 });
 
-//Get user by username
+/**
+ * GET: Returns data on a single user (user object) by username
+ * Request body: Bearer token
+ * @param Username
+ * @returns user object
+ * @requires passport
+ */
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ Username: req.params.Username })
         .then((user) => {
