@@ -1,5 +1,7 @@
 # movie_api
  API to access movie information.
+ 
+ ## Description
 
 Goal was to build the server-side component of a “movies” web application. The web
 application will provide users with access to information about different
